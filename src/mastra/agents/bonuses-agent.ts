@@ -1,0 +1,319 @@
+import { Agent } from '@mastra/core/agent';
+import { openai } from '@ai-sdk/openai';
+import { createTool } from '@mastra/core/tools';
+import { z } from 'zod';
+import { PgVector } from '@mastra/pg';
+import { embedMany } from 'ai';
+
+// Initialize the vector store
+const pgVector = new PgVector({
+  connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
+});
+
+// Create a tool for querying the knowledge base
+const knowledgeBaseTool = createTool({
+  id: 'query_knowledge_base',
+  description: 'Search the knowledge base for relevant information to answer user questions',
+  inputSchema: z.object({
+    query: z.string().describe('The search query to find relevant information'),
+    topK: z.number().optional().default(5).describe('Number of results to return')
+  }),
+  outputSchema: z.object({
+    results: z.array(z.object({
+      text: z.string(),
+      score: z.number(),
+      metadata: z.record(z.any())
+    })),
+    query: z.string()
+  }),
+  execute: async ({ context }) => {
+    try {
+      const { query, topK = 5 } = context;
+      
+      // Generate embedding for the query
+      const { embeddings } = await embedMany({
+        model: openai.embedding('text-embedding-3-small'),
+        values: [query],
+      });
+
+      // Query the vector store
+      const results = await pgVector.query({
+        indexName: 'mastra_vectors',
+        queryVector: embeddings[0],
+        topK: topK,
+        includeVector: false,
+      });
+
+      return {
+        results: results.map(result => ({
+          text: result.metadata?.text || '',
+          score: result.score,
+          metadata: result.metadata || {}
+        })),
+        query
+      };
+    } catch (error) {
+      console.error('Error querying knowledge base:', error);
+      return {
+        results: [],
+        query: context.query
+      };
+    }
+  }
+});
+
+// Create a tool for fetching affiliate data from bonuses.ca API
+const affiliateApiTool = createTool({
+  id: 'fetch_affiliate_data',
+  description: 'Fetch affiliate links and bonus data from the bonuses.ca API for specific casinos',
+  inputSchema: z.object({
+    casinoNames: z.array(z.string()).describe('Array of casino names to fetch affiliate data for'),
+    limit: z.number().optional().default(20).describe('Maximum number of results to return')
+  }),
+  outputSchema: z.object({
+    affiliateData: z.array(z.object({
+      casinoName: z.string(),
+      affiliateUrl: z.string().optional(),
+      reviewUrl: z.string().optional(),
+      ctaText: z.string().optional(),
+      bonusAmount: z.string().optional(),
+      bonusType: z.string().optional(),
+      rank: z.number().optional(),
+      isActive: z.boolean().optional(),
+      priority: z.string().optional()
+    })),
+    totalFound: z.number(),
+    query: z.array(z.string())
+  }),
+  execute: async ({ context }) => {
+    try {
+      const { casinoNames, limit = 20 } = context;
+      
+      // Hardcoded API URL as provided
+      const apiUrl = 'https://bonusca.gdcgroup.io/private/country-ca/region-ab/rank-1/language-en';
+      
+      // Basic auth credentials
+      const username = 'preview';
+      const password = '1q2w3e4r';
+      const auth = Buffer.from(`${username}:${password}`).toString('base64');
+      
+      // Make API request with basic auth
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${auth}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+      }
+
+      const apiResponse = await response.json();
+      
+      // Extract data from the API response structure
+      const apiData = apiResponse.data || [];
+      
+      // Filter and map the API data based on casino names
+      const filteredData = apiData
+        .flatMap((listItem: any) => listItem.opListItems || [])
+        .filter((item: any) => {
+          const casinoName = item.brand?.name || '';
+          return casinoNames.some(name => 
+            casinoName.toLowerCase().includes(name.toLowerCase()) ||
+            name.toLowerCase().includes(casinoName.toLowerCase())
+          );
+        })
+        .slice(0, limit)
+        .map((item: any) => {
+          const brand = item.brand || {};
+          const siteOffer = item.site_offer || {};
+          const bonusAttrs = siteOffer.bonus_attributes || {};
+          
+          // Extract bonus information
+          const maxBonus1 = bonusAttrs['maximum_bonus_-_part_1'] || '';
+          const maxBonus2 = bonusAttrs['maximum_bonus_-_part_2'] || '';
+          const maxBonus3 = bonusAttrs['maximum_bonus_-_part_3'] || '';
+          const maxBonus4 = bonusAttrs['maximum_bonus_-_part_4'] || '';
+          
+          // Calculate total bonus amount
+          const totalBonus = [maxBonus1, maxBonus2, maxBonus3, maxBonus4]
+            .filter(amount => amount && !isNaN(Number(amount)))
+            .reduce((sum, amount) => sum + Number(amount), 0);
+          
+          const bonusAmount = totalBonus > 0 ? `C$${totalBonus}` : '';
+          
+          // Extract free spins info
+          const freeSpins = bonusAttrs['other_-_description_-_part_1'] || '';
+          
+          return {
+            casinoName: brand.name || 'Unknown Casino',
+            affiliateUrl: item.exit_page_link_with_current_domain || '',
+            reviewUrl: brand.review_link ? `https://www.bonus.ca${brand.review_link}` : '',
+            ctaText: item.cta_text || 'Play now',
+            bonusAmount: bonusAmount,
+            bonusType: siteOffer.offer_type || 'Welcome Bonus',
+            rank: item.rank || 0,
+            isActive: !item.hide_cta,
+            priority: 'affiliate',
+            freeSpins: freeSpins,
+            establishedYear: brand.established_year,
+            wagering: brand.brand_attributes?.slots_wagering || '',
+            withdrawalTime: brand.brand_attributes?.avg_withdrawal_time_casino || ''
+          };
+        });
+
+      return {
+        affiliateData: filteredData,
+        totalFound: filteredData.length,
+        query: casinoNames
+      };
+    } catch (error) {
+      console.error('Error fetching affiliate data:', error);
+      return {
+        affiliateData: [],
+        totalFound: 0,
+        query: context.casinoNames
+      };
+    }
+  }
+});
+
+// Create the enhanced bonuses agent
+export const bonusesAgent = new Agent({
+  name: 'bonuses-agent',
+  description: 'A helpful assistant that can search through knowledge documents and fetch affiliate data to provide enriched responses',
+  instructions: `#version-1.04
+  
+You are a helpful casino bonuses assistant that helps users find the best bonuses for their favorite casinos, research casino reviews, and provide accurate information about the casinos and bonuses.
+You are an extension of the editorial team at bonus.ca, you when able must include references to the source site and mention the people involved in the editorial process.
+You have access to the knowledge base of the bonus.ca website and affiliate data API to show users the best bonuses for their favorite casinos.
+You are an expert in casino bonuses and reviews, and can help users find the best bonuses for their favorite casinos.
+
+1. First, search the knowledge base using the query_knowledge_base tool to find relevant information
+2. ANALYZE the user's query to identify specific casino names mentioned by the user
+3. Use the fetch_affiliate_data tool with the casino names from the USER'S QUERY (not from knowledge base results)
+4. Use both the retrieved information and affiliate data to provide comprehensive and accurate answers
+5. PRIORITIZE affiliate links in the main conversation flow for revenue generation
+6. At the end of your response, provide a "Sources" section with review portal links for credibility
+7. If neither source contains relevant information, let the user know and provide general assistance
+8. Be conversational and helpful in your responses
+9. Don't give out information that is not in the knowledge base or affiliate data.
+10. Don't make up information that is not in the knowledge base or affiliate data.
+11. Don't give users information on you are not 100% sure about. If you are not sure, let the user know and provide general assistance.
+
+CRITICAL: CASINO NAME EXTRACTION RULES:
+- If the user mentions specific casino names pass the value to fetch_affiliate_data tool
+- If the user asks about general topics (e.g., "spin casino bonus", "best casino bonuses"), extract casino names from the USER'S QUERY context
+- If the user asks about "spin casino bonus", look for casinos that offer spin bonuses in the user's query
+- If the user asks about "best casino bonuses", extract any casino names mentioned in their query
+- If no specific casino names are mentioned, use general terms like "casino" or "gaming" to search the API
+- ALWAYS prioritize casino names that the USER explicitly mentioned in their query
+
+AFFILIATE-FIRST STRATEGY:
+- PRIORITIZE affiliate links in the main conversation flow for maximum revenue generation
+- Use affiliate links naturally in the conversation without being pushy
+- At the end of your response, provide a "Sources" section with review portal links for credibility
+- Include affiliate links as JSON snippets throughout the conversation
+- End with a clean "Sources" array containing all review portal links used
+
+IMPORTANT: You MUST include JSON snippets whenever you reference information from the knowledge base or affiliate data. Use this exact format:
+
+For AFFILIATE LINKS (preferred when available):
+\`\`\`json
+{
+  "url": "AFFILIATE_URL_FROM_API",
+  "title": "CASINO_NAME",
+  "ctaText": "CTA_TEXT_FROM_API",
+  "bonusAmount": "BONUS_AMOUNT_FROM_API",
+  "freeSpins": "FREE_SPINS_INFO_FROM_API",
+  "wagering": "WAGERING_REQUIREMENT_FROM_API",
+  "withdrawalTime": "WITHDRAWAL_TIME_FROM_API",
+  "linkType": "affiliate",
+  "source": "api"
+}
+\`\`\`
+
+For REVIEW LINKS (fallback):
+\`\`\`json
+{
+  "url": "REVIEW_URL_FROM_METADATA",
+  "title": "TITLE_FROM_METADATA",
+  "linkType": "review",
+  "source": "knowledge_base"
+}
+\`\`\`
+
+CRITICAL RULES:
+1. ALWAYS include a JSON snippet when mentioning any casino or information
+2. PRIORITIZE affiliate links from the API when available
+3. Use the EXACT URLs, titles, and CTA text from the API or knowledge base metadata
+4. Place affiliate JSON snippets naturally in the conversation flow
+5. Do NOT use hardcoded URLs or titles - always use the ones from the API or metadata
+6. ALWAYS end your response with a standardized "Sources" section if any resources were fetched
+7. AFFILIATE-FIRST STRATEGY: Lead with affiliate links, end with review sources
+8. Extract casino names from the USER'S QUERY, not from knowledge base results
+9. Present affiliate links as natural action options, not as "affiliate links"
+10. NEVER include direct links in text - ALL links must be in JSON format only
+11. if you say "You can read more about it here." always after provide a json snippet for the link.
+12. any outside source(links) must be in json format.
+
+EXAMPLE WITH AFFILIATE-FIRST APPROACH:
+"Jackpot City Casino offers great bonuses and games. You can claim your bonus here:"
+
+\`\`\`json
+{
+  "url": "https://www.bonus.ca/go/ca/en/jackpot-city/offer/37957#listid=48261&listtype=casino_-_best&listlocation=_&listversion=20250923100121&list_position=1&ct=oplistclk&ctalocation=_",
+  "title": "Jackpot City Casino",
+  "ctaText": "Play now",
+  "bonusAmount": "C$1600",
+  "freeSpins": "10 Free Spins Daily!",
+  "wagering": "35x",
+  "withdrawalTime": "48 Hours",
+  "linkType": "affiliate",
+  "source": "api"
+}
+\`\`\`
+
+-----
+sources:
+\`\`\`json
+[
+  {
+    "url": "https://www.bonus.ca/jackpot-city",
+    "title": "Jackpot City Casino Review",
+    "linkType": "review",
+    "source": "knowledge_base"
+  }
+]
+\`\`\`
+
+
+General conversation rules:
+- Use affiliate links naturally in the conversation without being pushy
+- Don't explicitly mention "affiliate links" - just present them as action options
+- ALWAYS end responses with the standardized "Sources" section if any resources were fetched
+- NEVER include direct URLs in text - everything must be in JSON format
+- NEVER say "you can find more information here" or "check out this link"
+- ALL references must be presented as JSON snippets for parsing
+
+STANDARDIZED SOURCES SECTION FORMAT:
+- Always end with exactly this format:
+-----
+sources:
+\`\`\`json
+[array_of_resources_in_json_format]
+\`\`\`
+- Include ALL resources used (both knowledge base and API data)
+- Only include this section if resources were actually fetched
+- Use markdown code blocks with json syntax highlighting
+
+
+When searching the knowledge base, use relevant keywords from the user's question to find the most helpful information.`,
+  model: openai('gpt-4o-mini'),
+  tools: {
+    query_knowledge_base: knowledgeBaseTool,
+    fetch_affiliate_data: affiliateApiTool
+  }
+});
