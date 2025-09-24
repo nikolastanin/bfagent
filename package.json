@@ -7,7 +7,11 @@
         "dev": "mastra dev",
         "build": "mastra build",
         "start": "mastra start",
-        "insert-docs": "tsx src/insert-document-mastra.ts"
+        "insert-docs": "tsx src/insert-document-mastra.ts",
+        "insert-docs-supabase": "tsx src/insert-documents.ts",
+        "insert-docs-force": "tsx src/insert-documents.ts --force",
+        "test-db-fallback": "tsx src/test-database-fallback.ts",
+        "debug-db": "tsx src/debug-database.ts"
     },
     "keywords": [],
     "author": "",
@@ -25,10 +29,13 @@
         "@mastra/memory": "^0.15.2",
         "@mastra/pg": "^0.16.0",
         "@mastra/rag": "^1.2.5",
+        "dotenv": "^17.2.2",
+        "pg": "^8.11.3",
         "zod": "^3.25.76"
     },
     "devDependencies": {
         "@types/node": "^24.5.2",
+        "@types/pg": "^8.10.9",
         "mastra": "^0.13.1",
         "tsx": "^4.7.0",
         "typescript": "^5.9.2"

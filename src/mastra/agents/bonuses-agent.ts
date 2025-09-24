@@ -5,15 +5,75 @@ import { z } from 'zod';
 import { PgVector } from '@mastra/pg';
 import { embedMany } from 'ai';
 
-// Initialize the vector store
-const pgVector = new PgVector({
+// Initialize vector stores with environment-based configuration
+const supabaseVector = new PgVector({
+  connectionString: process.env.SUPABASE_URL || 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
+});
+
+const localVector = new PgVector({
   connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
 });
 
-// Create a tool for querying the knowledge base
+// Function to get active vector store based on environment configuration
+async function getActiveVectorStore(): Promise<PgVector> {
+  const dbSource = process.env.DB_SOURCE || 'local';
+  
+  if (dbSource === 'supabase') {
+    try {
+      await supabaseVector.createIndex({
+        indexName: 'mastra_vectors',
+        dimension: 1536,
+        metric: 'cosine',
+        indexConfig: {
+          type: 'hnsw',
+          hnsw: {
+            m: 16,
+            efConstruction: 64
+          }
+        }
+      });
+      console.log('✅ Connected to Supabase');
+      return supabaseVector;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage?.includes('already exists') || errorMessage?.includes('relation') || errorMessage?.includes('duplicate')) {
+        console.log('✅ Connected to Supabase (index exists)');
+        return supabaseVector;
+      }
+      throw new Error(`Supabase connection failed: ${errorMessage}`);
+    }
+  } else {
+    // Default to local database
+    try {
+      await localVector.createIndex({
+        indexName: 'mastra_vectors',
+        dimension: 1536,
+        metric: 'cosine',
+        indexConfig: {
+          type: 'hnsw',
+          hnsw: {
+            m: 16,
+            efConstruction: 64
+          }
+        }
+      });
+      console.log('✅ Connected to local database');
+      return localVector;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage?.includes('already exists') || errorMessage?.includes('relation') || errorMessage?.includes('duplicate')) {
+        console.log('✅ Connected to local database (index exists)');
+        return localVector;
+      }
+      throw new Error(`Local database connection failed: ${errorMessage}`);
+    }
+  }
+}
+
+// Create a tool for querying the knowledge base with environment-based database selection
 const knowledgeBaseTool = createTool({
   id: 'query_knowledge_base',
-  description: 'Search the knowledge base for relevant information to answer user questions',
+  description: 'Search the knowledge base using environment-configured database (DB_SOURCE=local|supabase)',
   inputSchema: z.object({
     query: z.string().describe('The search query to find relevant information'),
     topK: z.number().optional().default(5).describe('Number of results to return')
@@ -36,6 +96,13 @@ const knowledgeBaseTool = createTool({
         values: [query],
       });
 
+      // Get active vector store with fallback
+      const pgVector = await getActiveVectorStore();
+      
+      // Debug: Log which database source is being used
+      const isSupabase = pgVector === supabaseVector;
+      console.log(`🔍 Knowledge base query using: ${isSupabase ? 'Supabase' : 'Local PostgreSQL'} database`);
+      
       // Query the vector store
       const results = await pgVector.query({
         indexName: 'mastra_vectors',
@@ -43,6 +110,8 @@ const knowledgeBaseTool = createTool({
         topK: topK,
         includeVector: false,
       });
+
+      console.log(`📊 Found ${results.length} results from ${isSupabase ? 'Supabase' : 'Local'} database`);
 
       return {
         results: results.map(result => ({
@@ -184,7 +253,7 @@ const affiliateApiTool = createTool({
 export const bonusesAgent = new Agent({
   name: 'bonuses-agent',
   description: 'A helpful assistant that can search through knowledge documents and fetch affiliate data to provide enriched responses',
-  instructions: `#version-1.054
+  instructions: `#version-1.057
   
 You are a helpful casino bonuses assistant that helps users find the best bonuses for their favorite casinos, research casino reviews, and provide accurate information about the casinos and bonuses.
 You are an extension of the editorial team at bonus.ca, you when able must include references to the source site and mention the people involved in the editorial process.
@@ -202,6 +271,8 @@ You are an expert in casino bonuses and reviews, and can help users find the bes
 9. Don't give out information that is not in the knowledge base or affiliate data.
 10. Don't make up information that is not in the knowledge base or affiliate data.
 11. Don't give users information on you are not 100% sure about. If you are not sure, let the user know and provide general assistance.
+12. if user ask for a list of bonuses, casinos or similar... present them with a 1-5 list of bonuses, casinos or similar. don't pick just one item.
+
 
 CRITICAL: CASINO NAME EXTRACTION RULES:
 - If the user mentions specific casino names pass the value to fetch_affiliate_data tool
@@ -336,7 +407,7 @@ Do not include this section if the user is ending the conversation or explicitly
 
 
 When searching the knowledge base, use relevant keywords from the user's question to find the most helpful information.`,
-  model: openai('gpt-4o-mini'),
+  model: openai('gpt-4o'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,
     fetch_affiliate_data: affiliateApiTool
