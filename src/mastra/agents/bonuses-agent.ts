@@ -5,20 +5,16 @@ import { z } from 'zod';
 import { PgVector } from '@mastra/pg';
 import { embedMany } from 'ai';
 
-// Initialize vector stores with environment-based configuration
-const supabaseVector = new PgVector({
-  connectionString: process.env.SUPABASE_URL || 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
-});
-
-const localVector = new PgVector({
-  connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
-});
-
 // Function to get active vector store based on environment configuration
 async function getActiveVectorStore(): Promise<PgVector> {
   const dbSource = process.env.DB_SOURCE || 'local';
   
   if (dbSource === 'supabase') {
+    // Only initialize Supabase vector when needed
+    const supabaseVector = new PgVector({
+      connectionString: process.env.SUPABASE_URL || 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
+    });
+    
     try {
       await supabaseVector.createIndex({
         indexName: 'mastra_vectors',
@@ -43,7 +39,11 @@ async function getActiveVectorStore(): Promise<PgVector> {
       throw new Error(`Supabase connection failed: ${errorMessage}`);
     }
   } else {
-    // Default to local database
+    // Only initialize local vector when needed
+    const localVector = new PgVector({
+      connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
+    });
+    
     try {
       await localVector.createIndex({
         indexName: 'mastra_vectors',
@@ -100,8 +100,8 @@ const knowledgeBaseTool = createTool({
       const pgVector = await getActiveVectorStore();
       
       // Debug: Log which database source is being used
-      const isSupabase = pgVector === supabaseVector;
-      console.log(`🔍 Knowledge base query using: ${isSupabase ? 'Supabase' : 'Local PostgreSQL'} database`);
+      const dbSource = process.env.DB_SOURCE || 'local';
+      console.log(`🔍 Knowledge base query using: ${dbSource === 'supabase' ? 'Supabase' : 'Local PostgreSQL'} database`);
       
       // Query the vector store
       const results = await pgVector.query({
@@ -111,7 +111,7 @@ const knowledgeBaseTool = createTool({
         includeVector: false,
       });
 
-      console.log(`📊 Found ${results.length} results from ${isSupabase ? 'Supabase' : 'Local'} database`);
+      console.log(`📊 Found ${results.length} results from ${dbSource === 'supabase' ? 'Supabase' : 'Local'} database`);
 
       return {
         results: results.map(result => ({
