@@ -4,6 +4,9 @@ import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { PgVector } from '@mastra/pg';
 import { embedMany } from 'ai';
+import { Memory } from '@mastra/memory';
+import { LibSQLStore } from '@mastra/libsql';
+import { LibSQLVector } from '@mastra/libsql';
 
 // Function to get active vector store based on environment configuration
 async function getActiveVectorStore(): Promise<PgVector> {
@@ -253,6 +256,23 @@ const affiliateApiTool = createTool({
 export const bonusesAgent = new Agent({
   name: 'bonuses-agent',
   description: 'A helpful assistant that can search through knowledge documents and fetch affiliate data to provide enriched responses',
+  memory: new Memory({
+    storage: new LibSQLStore({ url: 'file:../../mastra.db' }),
+    options: {
+      threads: { generateTitle: true },
+      semanticRecall: true,
+      workingMemory: {
+        enabled: true,
+        scope: 'thread',
+        template: `#User Details
+Name:[]
+Interests:[]
+`,
+      },
+    },
+    embedder: openai.embedding('text-embedding-3-small'),
+    vector: new LibSQLVector({ connectionUrl: 'file:../../mastra.db' }),
+  }),
   instructions: `#version-1.057
   
 You are a helpful casino bonuses assistant that helps users find the best bonuses for their favorite casinos, research casino reviews, and provide accurate information about the casinos and bonuses.
