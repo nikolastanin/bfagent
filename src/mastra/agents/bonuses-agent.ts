@@ -15,7 +15,7 @@ async function getActiveVectorStore(): Promise<PgVector> {
   if (dbSource === 'supabase') {
     // Only initialize Supabase vector when needed
     const supabaseVector = new PgVector({
-      connectionString: process.env.SUPABASE_CONNECTION_STRING || '',
+      connectionString: process.env.SUPABASE_URL || '',
     });
     
     try {

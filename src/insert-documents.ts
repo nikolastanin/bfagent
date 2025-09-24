@@ -33,7 +33,7 @@ class SupabaseDocumentInserter {
   private indexName: string;
 
   constructor() {
-    const connectionString = process.env.SUPABASE_URL || 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres';
+    const connectionString = process.env.SUPABASE_URL || '';
     
     this.pgVector = new PgVector({
       connectionString,

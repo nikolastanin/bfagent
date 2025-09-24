@@ -5,11 +5,11 @@ import { Client } from 'pg';
 
 // Test both database connections
 const supabaseVector = new PgVector({
-  connectionString: process.env.SUPABASE_CONNECTION_STRING || '',
+  connectionString: process.env.SUPABASE_URL || '',
 });
 
 const localVector = new PgVector({
-  connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
+  connectionString: process.env.POSTGRES_CONNECTION_STRING || '',
 });
 
 async function debugDatabase() {
@@ -63,7 +63,7 @@ async function debugDatabase() {
   console.log('\n2.1. Dumping local table schema...');
   try {
     const localClient = new Client({
-      connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
+      connectionString: process.env.POSTGRES_CONNECTION_STRING || '',
     });
     
     await localClient.connect();
