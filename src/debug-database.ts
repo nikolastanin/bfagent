@@ -5,7 +5,7 @@ import { Client } from 'pg';
 
 // Test both database connections
 const supabaseVector = new PgVector({
-  connectionString: 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
+  connectionString: process.env.SUPABASE_CONNECTION_STRING || '',
 });
 
 const localVector = new PgVector({

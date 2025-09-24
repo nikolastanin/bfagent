@@ -15,7 +15,7 @@ async function getActiveVectorStore(): Promise<PgVector> {
   if (dbSource === 'supabase') {
     // Only initialize Supabase vector when needed
     const supabaseVector = new PgVector({
-      connectionString: process.env.SUPABASE_URL || 'postgresql://postgres.rdvxhipwrwcexrlvzxus:9&G%-z_hzx7S.YA@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
+      connectionString: process.env.SUPABASE_CONNECTION_STRING || '',
     });
     
     try {
@@ -44,7 +44,7 @@ async function getActiveVectorStore(): Promise<PgVector> {
   } else {
     // Only initialize local vector when needed
     const localVector = new PgVector({
-      connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://nikolastanin@localhost:5432/mastra_demo',
+      connectionString: process.env.POSTGRES_CONNECTION_STRING || '',
     });
     
     try {

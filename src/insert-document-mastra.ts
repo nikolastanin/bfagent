@@ -21,7 +21,7 @@ class MastraDocumentInserter {
 
   constructor() {
     this.pgVector = new PgVector({
-      connectionString: process.env.POSTGRES_CONNECTION_STRING || 'postgresql://postgres:password@localhost:5432/mastra',
+      connectionString: process.env.POSTGRES_CONNECTION_STRING || '',
     });
     this.indexName = 'mastra_vectors';
   }
