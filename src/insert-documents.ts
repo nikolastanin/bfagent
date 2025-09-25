@@ -1,9 +1,13 @@
+import { config } from 'dotenv';
 import { PgVector } from '@mastra/pg';
 import { MDocument } from '@mastra/rag';
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import { createHash } from 'crypto';
 import { Pool } from 'pg';
+
+// Load environment variables
+config();
 
 interface ContentFile {
   id: string;
@@ -230,8 +234,37 @@ class SupabaseDocumentInserter {
     }
   }
 
+  async clearIndex(): Promise<void> {
+    try {
+      console.log('🗑️  Clearing vector data...');
+      
+      // Use TRUNCATE to efficiently clear all data from the table
+      const clearDataQuery = `TRUNCATE TABLE ${this.indexName}`;
+      
+      await this.dbClient.query(clearDataQuery);
+      console.log('✅ Vector table truncated successfully');
+      
+      console.log('✅ Vector data cleared successfully');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage?.includes('does not exist') || errorMessage?.includes('not found')) {
+        console.log('ℹ️  Vector table does not exist (already clear)');
+      } else {
+        console.error('❌ Error clearing vector data:', errorMessage);
+        throw error;
+      }
+    }
+  }
+
+
   async processPendingFiles(force: boolean = false): Promise<void> {
     const mode = force ? 'all files (force mode)' : 'pending files';
+    
+    // Clear data if force mode is enabled
+    if (force) {
+      await this.clearIndex();
+    }
+    
     console.log(`Fetching ${mode} from database...`);
     
     const pendingFiles = await this.getPendingFiles(force);
