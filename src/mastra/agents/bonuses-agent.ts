@@ -427,7 +427,7 @@ Do not include this section if the user is ending the conversation or explicitly
 
 
 When searching the knowledge base, use relevant keywords from the user's question to find the most helpful information.`,
-  model: openai('gpt-4o'),
+  model: openai('gpt-4o-mini'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,
     fetch_affiliate_data: affiliateApiTool
