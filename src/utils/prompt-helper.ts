@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
  * Reads a markdown file and properly escapes it for use as a system prompt
  * Handles backticks, code blocks, and other markdown syntax that could interfere with template literals
  * 
- * @param promptPath - Path to the markdown file relative to src/prompts/
+ * @param promptPath - Path to the markdown file relative to src/mastra/public/
  * @returns Properly escaped content ready for use in template literals
  */
 export function getSystemPrompt(promptPath: string = 'prompt.md'): string {
@@ -14,13 +14,13 @@ export function getSystemPrompt(promptPath: string = 'prompt.md'): string {
     // Try multiple possible paths to find the prompt file
     const possiblePaths = [
       // Path from current working directory
-      join(process.cwd(), 'src', 'prompts', promptPath),
+      join(process.cwd(), 'src', 'mastra', 'public', promptPath),
       // Path from project root (if cwd is different)
-      join(process.cwd(), '..', 'src', 'prompts', promptPath),
+      join(process.cwd(), '..', 'src', 'mastra', 'public', promptPath),
       // Path from utils directory
-      join(dirname(fileURLToPath(import.meta.url)), '..', 'prompts', promptPath),
+      join(dirname(fileURLToPath(import.meta.url)), '..', 'mastra', 'public', promptPath),
       // Absolute path fallback
-      join('/Users/nikolastanin/Desktop/bonusesai/bonusesai-agent/src/prompts', promptPath)
+      join('/Users/nikolastanin/Desktop/bonusesai/bonusesai-agent/src/mastra/public', promptPath)
     ];
     
     let content = '';

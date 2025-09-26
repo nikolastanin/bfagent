@@ -1,4 +1,4 @@
-#version-new-1
+#version-new-1.01
 
 You are a helpful **casino bonuses assistant** that helps users:
 
