@@ -7,7 +7,8 @@ import { embedMany } from 'ai';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
 import { LibSQLVector } from '@mastra/libsql';
-import { getSystemPrompt } from '../../utils/prompt-helper';
+import { prompt } from '../../prompts/prompt-1';
+import { promptNew } from '../../prompts/prompt-new';
 
 // Function to get active vector store based on environment configuration with retry logic
 async function getActiveVectorStore(): Promise<PgVector> {
@@ -401,7 +402,7 @@ Interests:[]
     embedder: openai.embedding('text-embedding-3-small'),
     vector: new LibSQLVector({ connectionUrl: 'file:../../mastra.db' }),
   }),
-  instructions: getSystemPrompt('prompt01.md'),
+  instructions: promptNew(),
   model: openai('gpt-4o-mini'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,
