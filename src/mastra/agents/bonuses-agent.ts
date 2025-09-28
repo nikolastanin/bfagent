@@ -402,7 +402,7 @@ Interests:[]
     embedder: openai.embedding('text-embedding-3-small'),
     vector: new LibSQLVector({ connectionUrl: 'file:../../mastra.db' }),
   }),
-  instructions: promptNew(),
+  instructions: prompt(),
   model: openai('gpt-4o-mini'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,
