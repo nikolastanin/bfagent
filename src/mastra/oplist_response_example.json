@@ -1,0 +1,679 @@
+{
+    "data": [{
+        "class": "gdcg-oplist",
+        "data-gdcg_type": null,
+        "data-listid": 56679,
+        "data-version": "20250312093445",
+        "data-listtype": null,
+        "data-gdcg_site": "BonusFinder",
+        "data-gdcg_siteid": 110,
+        "data-gdcg_country": null,
+        "data-gdcg_site_country_version": 201,
+        "data-gdcg_language_id": 1,
+        "data-gdcg_region": null,
+        "data-product_type_id": 34,
+        "data-product_type": "Casino",
+        "data-gdcg_ktag_page_attributes": "{\"event\":\"ktag\",\"site_id\":\"110\", \"language_id\":\"1\", \"site_country_version_id\":\"201\"}",
+        "opListItems": [{
+                "data-gdcg_rankid": null,
+                "region_code": null,
+                "region": null,
+                "rank": 1,
+                "brand_product_id": 815,
+                "brand_product_name_seo_friendly": "duelzcasino",
+                "brand": {
+                    "name": "Duelz Casino",
+                    "brand_name_seo_friendly": "duelz",
+                    "brand_name_override": null,
+                    "name_seo_friendly": "duelz",
+                    "attributes": null,
+                    "payment_providers": [{
+                            "feature": "Visa",
+                            "image": "https://objects.kaxmedia.com/auto/o/34071/0738bf6000.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140269/b389c22a72.svg"
+                        },
+                        {
+                            "feature": "MasterCard",
+                            "image": "https://objects.kaxmedia.com/auto/o/34064/07c0358d77.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140245/f42a085bd0.svg"
+                        },
+                        {
+                            "feature": "Skrill",
+                            "image": "https://objects.kaxmedia.com/auto/o/34069/dabce048ae.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140261/099a321527.svg"
+                        },
+                        {
+                            "feature": "Neteller",
+                            "image": "https://objects.kaxmedia.com/auto/o/34065/1bcc1ea9a3.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140248/55d67c7df6.svg"
+                        },
+                        {
+                            "feature": "Trustly",
+                            "image": "https://objects.kaxmedia.com/auto/o/82791/01761ea629.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140264/497ad839dd.svg"
+                        },
+                        {
+                            "feature": "PayPal",
+                            "image": "https://objects.kaxmedia.com/auto/o/34067/f72d5e3212.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140254/b9fb4d8d18.svg"
+                        },
+                        {
+                            "feature": "Paysafecard",
+                            "image": "https://objects.kaxmedia.com/auto/o/218246/87fbf85231.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140255/9a8fda5c5e.svg"
+                        }
+                    ],
+                    "usps": [
+                        "10% cashback every Friday",
+                        "Daily tournaments with £1,500 prizes",
+                        "Over 20 non-stop drop slots",
+                        "Duelz has a unique website design and games from the top developers in the UK."
+                    ],
+                    "review_link": "/online-casinos/duelz-casino ",
+                    "attribute_types": [{
+                            "id": 2,
+                            "name": "All Casino Games X",
+                            "display_name": null,
+                            "order": 1,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "all_casino_games_x"
+                        },
+                        {
+                            "id": 373,
+                            "name": "Avg Withdrawal Time Casino",
+                            "display_name": null,
+                            "order": 2,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "avg_withdrawal_time_casino"
+                        },
+                        {
+                            "id": 74,
+                            "name": "Slots Wagering",
+                            "display_name": null,
+                            "order": 3,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "slots_wagering"
+                        }
+                    ],
+                    "brand_attributes": {
+                        "all_casino_games_x": "2000+",
+                        "avg_withdrawal_time_casino": "24 Hours",
+                        "slots_wagering": "35x"
+                    },
+                    "mandatory_brand_attributes": null,
+                    "is_social_casino": false,
+                    "established_year": 2018,
+                    "brand_color": null,
+                    "has_app": true,
+                    "brand_terms": false
+                },
+                "cta_text": "Play now",
+                "site_offer": {
+                    "description": null,
+                    "promo_code": null,
+                    "raw_promo_code": null,
+                    "terms_and_conditions": "18+. New players in GB only. 100% deposit bonus up to £100. Min. deposit: £20. Max Bonus wins: £500. Max bet with active bonus: £2. Wagering requirement: 30x sum of deposit + bonus. 100 Free Spins applicable to Book of Dead only: 20 Free Spins per day for 5 days. Daily login required. Maximum Free Spins winnings: £100. Winnings credited as bonus money with a 45x wagering requirement. Game restrictions apply. Games contribute differently when wagering a bonus. First deposit only, no expiration date. Deposit bonus expiration: 30 days if not wagered. Free spins expiration: 3 days. One bonus per person/address/device/IP. Own payment methods only. www.gambleaware.org Full T&Cs apply.",
+                    "bonus_attributes": {
+                        "%_match_-_part_1": "100",
+                        "first_deposit_bonus": true,
+                        "free_spins": true,
+                        "maximum_bonus_-_part_1": "100",
+                        "minimum_bet/deposit_to_qualify_-_part_1": "20",
+                        "number_of_free_spins_-_part_1": 100,
+                        "value_per_free_spin_-_part_1": "0.1"
+                    },
+                    "offer_expire_date": null,
+                    "offer_start_date": null,
+                    "offer_type": "First Deposit Bonus"
+                },
+                "ktag_attributes": "data-operator=\"Duelz\" data-product=\"duelz casino\" data-position=\"1\" data-brand_id=\"365\" data-brand_product_id=\"815\" data-offer_id=\"30924\" data-site_offer_id=\"67083\"",
+                "exit_page_link_with_current_domain": "https://www.bonusfinder.co.uk/go/uk/en/duelz/offer/67083#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=1&ct=oplistclk&ctalocation=_",
+                "exit_page_link_without_domain": "/go/uk/en/duelz/offer/67083#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=1&ct=oplistclk&ctalocation=_",
+                "hide_cta": false,
+                "payout": null
+            },
+            {
+                "data-gdcg_rankid": null,
+                "region_code": null,
+                "region": null,
+                "rank": 2,
+                "brand_product_id": 2248,
+                "brand_product_name_seo_friendly": "neptuneplaycasino",
+                "brand": {
+                    "name": "Neptune Play Casino",
+                    "brand_name_seo_friendly": "neptuneplay",
+                    "brand_name_override": null,
+                    "name_seo_friendly": "neptuneplay",
+                    "attributes": null,
+                    "payment_providers": [{
+                            "feature": "Visa",
+                            "image": "https://objects.kaxmedia.com/auto/o/34071/0738bf6000.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140269/b389c22a72.svg"
+                        },
+                        {
+                            "feature": "MasterCard",
+                            "image": "https://objects.kaxmedia.com/auto/o/34064/07c0358d77.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140245/f42a085bd0.svg"
+                        },
+                        {
+                            "feature": "Trustly",
+                            "image": "https://objects.kaxmedia.com/auto/o/82791/01761ea629.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140264/497ad839dd.svg"
+                        },
+                        {
+                            "feature": "Bank Transfer",
+                            "image": "https://objects.kaxmedia.com/auto/o/242180/ce955db035.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140220/e6d7a08437.svg"
+                        },
+                        {
+                            "feature": "PayPal",
+                            "image": "https://objects.kaxmedia.com/auto/o/34067/f72d5e3212.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140254/b9fb4d8d18.svg"
+                        },
+                        {
+                            "feature": "AstroPay",
+                            "image": "https://objects.kaxmedia.com/auto/o/176071/266b513a0d.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140219/c1ac8324ac.svg"
+                        },
+                        {
+                            "feature": "MuchBetter",
+                            "image": "https://objects.kaxmedia.com/auto/o/101328/92962330d0.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140247/a75862d553.svg"
+                        },
+                        {
+                            "feature": "Skrill",
+                            "image": "https://objects.kaxmedia.com/auto/o/34069/dabce048ae.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140261/099a321527.svg"
+                        },
+                        {
+                            "feature": "Paysafecard",
+                            "image": "https://objects.kaxmedia.com/auto/o/218246/87fbf85231.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140255/9a8fda5c5e.svg"
+                        }
+                    ],
+                    "usps": [
+                        "Exclusive free spins no wagering",
+                        "Latest new slots",
+                        "Live casino & game shows",
+                        "As a new online casino, Neptune Play offers a great selection of casino games, a rewards scheme and a sportsbook."
+                    ],
+                    "review_link": [],
+                    "attribute_types": [{
+                            "id": 2,
+                            "name": "All Casino Games X",
+                            "display_name": null,
+                            "order": 1,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "all_casino_games_x"
+                        },
+                        {
+                            "id": 373,
+                            "name": "Avg Withdrawal Time Casino",
+                            "display_name": null,
+                            "order": 2,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "avg_withdrawal_time_casino"
+                        },
+                        {
+                            "id": 74,
+                            "name": "Slots Wagering",
+                            "display_name": null,
+                            "order": 3,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "slots_wagering"
+                        }
+                    ],
+                    "brand_attributes": {
+                        "all_casino_games_x": "3000+",
+                        "avg_withdrawal_time_casino": "4 Hours",
+                        "slots_wagering": "40x"
+                    },
+                    "mandatory_brand_attributes": null,
+                    "is_social_casino": false,
+                    "established_year": 2024,
+                    "brand_color": null,
+                    "has_app": true,
+                    "brand_terms": false
+                },
+                "cta_text": "Play now",
+                "site_offer": {
+                    "description": null,
+                    "promo_code": null,
+                    "raw_promo_code": null,
+                    "terms_and_conditions": "New depositing players only. Min. deposit: £10. Max. bonus: £200 + 25 Bonus Spins on Book of Dead. Offer valid on the first deposit. No wagering is required on Bonus Spins. Wagering Required on Bonus Cash: 40x. The match-up bonus that requires a deposit must be wagered 40x. In order to withdraw your winnings, you must first use up all of your bonus spins or wait for them to expire (whichever comes first). Bonus Policy and Terms of Service apply.",
+                    "bonus_attributes": {
+                        "%_match_-_part_1": "100",
+                        "first_deposit_bonus": true,
+                        "free_spins": true,
+                        "game_names_-_part_1": "Book of Dead, with no wagering",
+                        "value_per_free_spin_-_part_1": "0.10",
+                        "number_of_free_spins_-_part_1": 25,
+                        "minimum_bet/deposit_to_qualify_-_part_1": "10",
+                        "maximum_bonus_-_part_1": "200"
+                    },
+                    "offer_expire_date": null,
+                    "offer_start_date": null,
+                    "offer_type": "Free Spins + No Wager Required"
+                },
+                "ktag_attributes": "data-operator=\"Neptune Play\" data-product=\"neptune play casino\" data-position=\"2\" data-brand_id=\"1612\" data-brand_product_id=\"2248\" data-offer_id=\"22880\" data-site_offer_id=\"47075\"",
+                "exit_page_link_with_current_domain": "https://www.bonusfinder.co.uk/go/uk/en/neptune-play/offer/47075#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=2&ct=oplistclk&ctalocation=_",
+                "exit_page_link_without_domain": "/go/uk/en/neptune-play/offer/47075#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=2&ct=oplistclk&ctalocation=_",
+                "hide_cta": false,
+                "payout": null
+            },
+            {
+                "data-gdcg_rankid": null,
+                "region_code": null,
+                "region": null,
+                "rank": 3,
+                "brand_product_id": 221,
+                "brand_product_name_seo_friendly": "hippodromecasino",
+                "brand": {
+                    "name": "Hippodrome Casino",
+                    "brand_name_seo_friendly": "hippodrome",
+                    "brand_name_override": "The Hippodrome Online Casino",
+                    "name_seo_friendly": "hippodrome",
+                    "attributes": null,
+                    "payment_providers": [{
+                            "feature": "Neteller",
+                            "image": "https://objects.kaxmedia.com/auto/o/34065/1bcc1ea9a3.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140248/55d67c7df6.svg"
+                        },
+                        {
+                            "feature": "Maestro",
+                            "image": "https://objects.kaxmedia.com/auto/o/34063/876a3141c6.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140244/ec55396e4e.svg"
+                        },
+                        {
+                            "feature": "MasterCard",
+                            "image": "https://objects.kaxmedia.com/auto/o/34064/07c0358d77.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140245/f42a085bd0.svg"
+                        },
+                        {
+                            "feature": "Visa",
+                            "image": "https://objects.kaxmedia.com/auto/o/34071/0738bf6000.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140269/b389c22a72.svg"
+                        }
+                    ],
+                    "usps": [
+                        "24/7 customer support",
+                        "Lots of progressive jackpot slots",
+                        "Unlock more free spins with larger deposits",
+                        "Hippodrome Online Casino brings the Leicester Square venue to your home with daily live games streamed from the casino."
+                    ],
+                    "review_link": [],
+                    "attribute_types": [{
+                            "id": 2,
+                            "name": "All Casino Games X",
+                            "display_name": null,
+                            "order": 1,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "all_casino_games_x"
+                        },
+                        {
+                            "id": 373,
+                            "name": "Avg Withdrawal Time Casino",
+                            "display_name": null,
+                            "order": 2,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "avg_withdrawal_time_casino"
+                        },
+                        {
+                            "id": 74,
+                            "name": "Slots Wagering",
+                            "display_name": null,
+                            "order": 3,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "slots_wagering"
+                        }
+                    ],
+                    "brand_attributes": {
+                        "all_casino_games_x": "1000+",
+                        "avg_withdrawal_time_casino": "Instant",
+                        "slots_wagering": "50x"
+                    },
+                    "mandatory_brand_attributes": null,
+                    "is_social_casino": false,
+                    "established_year": 2013,
+                    "brand_color": null,
+                    "has_app": true,
+                    "brand_terms": false
+                },
+                "cta_text": "Play now",
+                "site_offer": {
+                    "description": "Live streaming lets you play remotely on actual tables at London’s Hippodrome Casino",
+                    "promo_code": null,
+                    "raw_promo_code": null,
+                    "terms_and_conditions": "New customers only. You must opt in (on registration form) & deposit £20+ to qualify. Offer valid 7 days from registration. Debit card deposits only (exclusions apply). Welcome Bonus: 100% match bonus up to €100 on 1st deposit. 50x wagering applies (as do weighting requirements). Free Spins: Awarded on Big Bass Bonanza once you have staked\n£20. Spin value = 10p. No wagering requirements on free spin winnings. Full Terms",
+                    "bonus_attributes": {
+                        "%_match_-_part_1": "100",
+                        "game_names_-_part_1": "Big Bass Bonanza",
+                        "maximum_bonus_-_part_1": "100",
+                        "minimum_bet/deposit_to_qualify_-_part_1": "20",
+                        "number_of_free_spins_-_part_1": 100,
+                        "value_per_free_spin_-_part_1": "0.20"
+                    },
+                    "offer_expire_date": null,
+                    "offer_start_date": null,
+                    "offer_type": "Welcome Bonus"
+                },
+                "ktag_attributes": "data-operator=\"Hippodrome\" data-product=\"hippodrome casino\" data-position=\"3\" data-brand_id=\"479\" data-brand_product_id=\"221\" data-offer_id=\"27901\" data-site_offer_id=\"60288\"",
+                "exit_page_link_with_current_domain": "https://www.bonusfinder.co.uk/go/uk/en/hippodrome/offer/60288#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=3&ct=oplistclk&ctalocation=_",
+                "exit_page_link_without_domain": "/go/uk/en/hippodrome/offer/60288#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=3&ct=oplistclk&ctalocation=_",
+                "hide_cta": false,
+                "payout": null
+            },
+            {
+                "data-gdcg_rankid": null,
+                "region_code": null,
+                "region": null,
+                "rank": 4,
+                "brand_product_id": 1873,
+                "brand_product_name_seo_friendly": "pubcasino",
+                "brand": {
+                    "name": "Pub Casino",
+                    "brand_name_seo_friendly": "pubcasino",
+                    "brand_name_override": null,
+                    "name_seo_friendly": "pubcasino",
+                    "attributes": null,
+                    "payment_providers": [{
+                            "feature": "MasterCard",
+                            "image": "https://objects.kaxmedia.com/auto/o/34064/07c0358d77.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140245/f42a085bd0.svg"
+                        },
+                        {
+                            "feature": "Visa",
+                            "image": "https://objects.kaxmedia.com/auto/o/34071/0738bf6000.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140269/b389c22a72.svg"
+                        },
+                        {
+                            "feature": "Trustly",
+                            "image": "https://objects.kaxmedia.com/auto/o/82791/01761ea629.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140264/497ad839dd.svg"
+                        },
+                        {
+                            "feature": "Skrill",
+                            "image": "https://objects.kaxmedia.com/auto/o/34069/dabce048ae.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140261/099a321527.svg"
+                        },
+                        {
+                            "feature": "Neteller",
+                            "image": "https://objects.kaxmedia.com/auto/o/34065/1bcc1ea9a3.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140248/55d67c7df6.svg"
+                        },
+                        {
+                            "feature": "Apple Pay",
+                            "image": "https://objects.kaxmedia.com/auto/o/227232/5910e5dfb0.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140218/435ac7998d.svg"
+                        },
+                        {
+                            "feature": "Bank Transfer",
+                            "image": "https://objects.kaxmedia.com/auto/o/242180/ce955db035.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140220/e6d7a08437.svg"
+                        },
+                        {
+                            "feature": "PayPal",
+                            "image": "https://objects.kaxmedia.com/auto/o/34067/f72d5e3212.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140254/b9fb4d8d18.svg"
+                        }
+                    ],
+                    "usps": [
+                        "New Online Casino established 2023",
+                        "Progressive jackpot slots",
+                        "Accepts e-wallets and PaySafeCard",
+                        "Pub Casino offers exciting casino games and jackpot slots, with the option to use alternative payment methods like e-wallets."
+                    ],
+                    "review_link": [],
+                    "attribute_types": [{
+                            "id": 2,
+                            "name": "All Casino Games X",
+                            "display_name": null,
+                            "order": 1,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "all_casino_games_x"
+                        },
+                        {
+                            "id": 373,
+                            "name": "Avg Withdrawal Time Casino",
+                            "display_name": null,
+                            "order": 2,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "avg_withdrawal_time_casino"
+                        },
+                        {
+                            "id": 74,
+                            "name": "Slots Wagering",
+                            "display_name": null,
+                            "order": 3,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "slots_wagering"
+                        }
+                    ],
+                    "brand_attributes": {
+                        "all_casino_games_x": "2200+",
+                        "avg_withdrawal_time_casino": "Up to 24 Hours",
+                        "slots_wagering": "40x"
+                    },
+                    "mandatory_brand_attributes": null,
+                    "is_social_casino": false,
+                    "established_year": 2024,
+                    "brand_color": null,
+                    "has_app": true,
+                    "brand_terms": false
+                },
+                "cta_text": "Play now",
+                "site_offer": {
+                    "description": null,
+                    "promo_code": null,
+                    "raw_promo_code": null,
+                    "terms_and_conditions": "Welcome bonus for new players only | Maximum bonus is 100% up to £100 | Min. deposit is £10 | No max cash out | Wagering is 40x bonus | Maximum bet with an active bonus is £5 | Eligibility is restricted for suspected abuse |  Skrill & Neteller deposits excluded for welcome bonus | Full terms apply",
+                    "bonus_attributes": {
+                        "first_deposit_bonus": true,
+                        "minimum_bet/deposit_to_qualify_-_part_1": "10",
+                        "%_match_-_part_1": "100",
+                        "maximum_bonus_-_part_1": "100"
+                    },
+                    "offer_expire_date": null,
+                    "offer_start_date": null,
+                    "offer_type": "First Deposit Bonus"
+                },
+                "ktag_attributes": "data-operator=\"Pub Casino\" data-product=\"pub casino\" data-position=\"4\" data-brand_id=\"1347\" data-brand_product_id=\"1873\" data-offer_id=\"21858\" data-site_offer_id=\"45285\"",
+                "exit_page_link_with_current_domain": "https://www.bonusfinder.co.uk/go/uk/en/pub-casino/offer/45285#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=4&ct=oplistclk&ctalocation=_",
+                "exit_page_link_without_domain": "/go/uk/en/pub-casino/offer/45285#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=4&ct=oplistclk&ctalocation=_",
+                "hide_cta": false,
+                "payout": null
+            },
+            {
+                "data-gdcg_rankid": null,
+                "region_code": null,
+                "region": null,
+                "rank": 5,
+                "brand_product_id": 78,
+                "brand_product_name_seo_friendly": "betwaycasino",
+                "brand": {
+                    "name": "Betway Casino",
+                    "brand_name_seo_friendly": "betway",
+                    "brand_name_override": null,
+                    "name_seo_friendly": "betway",
+                    "attributes": null,
+                    "payment_providers": [{
+                            "feature": "PayPal",
+                            "image": "https://objects.kaxmedia.com/auto/o/34067/f72d5e3212.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140254/b9fb4d8d18.svg"
+                        },
+                        {
+                            "feature": "MasterCard",
+                            "image": "https://objects.kaxmedia.com/auto/o/34064/07c0358d77.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140245/f42a085bd0.svg"
+                        },
+                        {
+                            "feature": "Visa",
+                            "image": "https://objects.kaxmedia.com/auto/o/34071/0738bf6000.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140269/b389c22a72.svg"
+                        },
+                        {
+                            "feature": "Trustly",
+                            "image": "https://objects.kaxmedia.com/auto/o/82791/01761ea629.png",
+                            "image_solid": "https://objects.kaxmedia.com/auto/o/140264/497ad839dd.svg"
+                        }
+                    ],
+                    "usps": [
+                        "Well known bookies",
+                        "Hundreds of online slots",
+                        "Wide choice of Live Casino games",
+                        "Betway surprised us with their extensive range of casino games! Plus there is no wagering on the new player bonus. Win -  Win! "
+                    ],
+                    "review_link": "/review/betway-casino",
+                    "attribute_types": [{
+                            "id": 2,
+                            "name": "All Casino Games X",
+                            "display_name": null,
+                            "order": 1,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "all_casino_games_x"
+                        },
+                        {
+                            "id": 373,
+                            "name": "Avg Withdrawal Time Casino",
+                            "display_name": null,
+                            "order": 2,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "avg_withdrawal_time_casino"
+                        },
+                        {
+                            "id": 74,
+                            "name": "Slots Wagering",
+                            "display_name": null,
+                            "order": 3,
+                            "sort": false,
+                            "tied_to": "BrandProduct",
+                            "category": null,
+                            "attribute_data_type": {
+                                "id": 5,
+                                "name": "String"
+                            },
+                            "key": "slots_wagering"
+                        }
+                    ],
+                    "brand_attributes": {
+                        "all_casino_games_x": "2000+",
+                        "avg_withdrawal_time_casino": "Instant",
+                        "slots_wagering": "50x"
+                    },
+                    "mandatory_brand_attributes": null,
+                    "is_social_casino": true,
+                    "established_year": 2006,
+                    "brand_color": null,
+                    "has_app": true,
+                    "brand_terms": false
+                },
+                "cta_text": "Play now",
+                "site_offer": {
+                    "description": "Stake £10, Get 150 Free Spins with No Wagering!",
+                    "promo_code": null,
+                    "raw_promo_code": null,
+                    "terms_and_conditions": "*New UK customers only. Deposit & Stake Min £10. Debit card only (exclusions apply). 150 free spins (£0.10) on selected games. No wagering requirements on Free Spins Winnings. Spins expire after 7 days. 18+ BeGambleAware.org. Full Terms apply",
+                    "bonus_attributes": {
+                        "first_deposit_bonus": true,
+                        "minimum_bet/deposit_to_qualify_-_part_1": "10",
+                        "value_per_free_spin_-_part_1": "0.10",
+                        "number_of_free_spins_-_part_1": 150,
+                        "game_names_-_part_1": "Fishin Frenzy Even Bigger Catch "
+                    },
+                    "offer_expire_date": null,
+                    "offer_start_date": null,
+                    "offer_type": "First Deposit Bonus"
+                },
+                "ktag_attributes": "data-operator=\"Betway\" data-product=\"betway casino\" data-position=\"5\" data-brand_id=\"144\" data-brand_product_id=\"78\" data-offer_id=\"21788\" data-site_offer_id=\"45215\"",
+                "exit_page_link_with_current_domain": "https://www.bonusfinder.co.uk/go/uk/en/betway/offer/45215#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=5&ct=oplistclk&ctalocation=_",
+                "exit_page_link_without_domain": "/go/uk/en/betway/offer/45215#listid=56679&listtype=bf_exit_popup_list&listlocation=_&listversion=20250312093445&list_position=5&ct=oplistclk&ctalocation=_",
+                "hide_cta": false,
+                "payout": null
+            }
+        ]
+    }]
+}

@@ -32,6 +32,12 @@ CRITICAL: CASINO NAME EXTRACTION RULES:
 - If no specific casino names are mentioned, use general terms like "casino" or "gaming" to search the API
 - ALWAYS prioritize casino names that the USER explicitly mentioned in their query
 
+RETRY LOGIC FOR EMPTY RESULTS:
+- If the fetch_affiliate_data tool returns empty results (totalFound: 0), immediately retry with fetchTopCasinos: true and limit: 3
+- When retrying, use the same apiUrl and oplistType from the original call
+- This ensures users always get some casino recommendations even when their specific casino names aren't found
+- Present the top 3 casinos as "Here are some top casino recommendations instead:" or similar
+
 CRITICAL: OPLIST_URL AND OPLIST_TYPE EXTRACTION RULES:
 - After querying the knowledge base, check the metadata of each result for "oplist_url"
 - After querying the knowledge base, check the metadata of each result for "oplist_type"

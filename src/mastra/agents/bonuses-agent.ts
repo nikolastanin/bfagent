@@ -136,7 +136,7 @@ const knowledgeBaseTool = createTool({
   description: 'Search the knowledge base using environment-configured database (DB_SOURCE=local|supabase)',
   inputSchema: z.object({
     query: z.string().describe('The search query to find relevant information'),
-    topK: z.number().optional().default(5).describe('Number of results to return')
+    topK: z.number().optional().default(3).describe('Number of results to return')
   }),
   outputSchema: z.object({
     results: z.array(z.object({
@@ -148,7 +148,7 @@ const knowledgeBaseTool = createTool({
   }),
   execute: async ({ context }) => {
     try {
-      const { query, topK = 5 } = context;
+      const { query, topK = 3 } = context;
       
       // Generate embedding for the query
       const { embeddings } = await embedMany({
@@ -194,16 +194,18 @@ const knowledgeBaseTool = createTool({
 // Create a tool for fetching affiliate data from bonuses.ca API
 const affiliateApiTool = createTool({
   id: 'fetch_affiliate_data',
-  description: 'Fetch affiliate links and bonus data from the bonuses.ca API for specific casinos',
+  description: 'Fetch affiliate links and bonus data from the bonuses.ca API for specific casinos or top casinos when no specific names provided',
   inputSchema: z.object({
-    casinoNames: z.array(z.string()).describe('Array of casino names to fetch affiliate data for'),
+    casinoNames: z.array(z.string()).optional().describe('Array of casino names to fetch affiliate data for. If empty or not provided, will fetch top casinos'),
     limit: z.number().optional().default(20).describe('Maximum number of results to return'),
     apiUrl: z.string().optional().describe('Custom API URL to use instead of the default hardcoded URL'),
-    oplistType: z.string().optional().describe('Type of oplist from metadata - affects how API data is queried')
+    oplistType: z.string().optional().describe('Type of oplist from metadata - affects how API data is queried'),
+    fetchTopCasinos: z.boolean().optional().default(false).describe('If true, fetch top casinos regardless of casinoNames')
   }),
   outputSchema: z.object({
     affiliateData: z.array(z.object({
       casinoName: z.string(),
+      imageUrl: z.string().optional(),
       affiliateUrl: z.string().optional(),
       reviewUrl: z.string().optional(),
       ctaText: z.string().optional(),
@@ -219,7 +221,7 @@ const affiliateApiTool = createTool({
   }),
   execute: async ({ context }) => {
     try {
-      const { casinoNames, limit = 20, apiUrl: customApiUrl, oplistType } = context;
+      const { casinoNames = [], limit = 20, apiUrl: customApiUrl, oplistType, fetchTopCasinos = false } = context;
       
       // Use custom API URL if provided and valid, otherwise fall back to hardcoded URL
       const isValidUrl = customApiUrl && 
@@ -258,21 +260,71 @@ const affiliateApiTool = createTool({
       
       let filteredData;
       
-      // Different logic based on oplist_type
-      if (oplistType === 'brand') {
-        console.log('🏢 Using brand-specific logic for API data querying');
+      // Check if we should fetch top casinos (when no specific casino names or fetchTopCasinos is true)
+      const shouldFetchTopCasinos = fetchTopCasinos || casinoNames.length === 0;
+      
+      if (shouldFetchTopCasinos) {
+        console.log('🏆 Fetching top casinos from API (no specific casino names provided)');
         
-        // Brand-specific logic: query API data differently
+        // Fetch top casinos by rank, regardless of casino names
         filteredData = apiData
           .flatMap((listItem: any) => listItem.opListItems || [])
-          .filter((item: any) => {
-            const casinoName = item.brand?.name || '';
-            return casinoNames.some(name => 
-              casinoName.toLowerCase().includes(name.toLowerCase()) ||
-              name.toLowerCase().includes(casinoName.toLowerCase())
-            );
-          })
+          .sort((a: any, b: any) => (a.rank || 0) - (b.rank || 0)) // Sort by rank
           .slice(0, limit)
+          .map((item: any) => {
+            const brand = item.brand || {};
+            const siteOffer = item.site_offer || {};
+            const bonusAttrs = siteOffer.bonus_attributes || {};
+            
+            // Calculate total bonus amount
+            const maxBonus1 = bonusAttrs['maximum_bonus_-_part_1'] || '';
+            const maxBonus2 = bonusAttrs['maximum_bonus_-_part_2'] || '';
+            const maxBonus3 = bonusAttrs['maximum_bonus_-_part_3'] || '';
+            const maxBonus4 = bonusAttrs['maximum_bonus_-_part_4'] || '';
+            
+            const totalBonus = [maxBonus1, maxBonus2, maxBonus3, maxBonus4]
+              .filter(amount => amount && !isNaN(Number(amount)))
+              .reduce((sum, amount) => sum + Number(amount), 0);
+            
+            const bonusAmount = totalBonus > 0 ? `C$${totalBonus}` : '';
+            
+            // Extract free spins info
+            const freeSpins = bonusAttrs['other_-_description_-_part_1'] || '';
+            
+            return {
+              casinoName: brand.name || 'Unknown Casino',
+              imageUrl: `https://media.bonusfinder.co.uk/images/${brand.brand_name_seo_friendly}.png` || '',
+              affiliateUrl: item.exit_page_link_with_current_domain || '',
+              reviewUrl: brand.review_link ? `https://www.bonus.ca${brand.review_link}` : '',
+              ctaText: item.cta_text || 'Play now',
+              bonusAmount: bonusAmount,
+              bonusType: siteOffer.offer_type || 'Welcome Bonus',
+              rank: item.rank || 0,
+              isActive: !item.hide_cta,
+              priority: 'affiliate',
+              freeSpins: freeSpins,
+              establishedYear: brand.established_year,
+              wagering: brand.brand_attributes?.slots_wagering || '',
+              withdrawalTime: brand.brand_attributes?.avg_withdrawal_time_casino || '',
+              oplistType: oplistType || 'top_casinos' // Mark as top casinos data
+            };
+          });
+      } else {
+        // Different logic based on oplist_type
+        if (oplistType === 'brand') {
+          console.log('🏢 Using brand-specific logic for API data querying');
+          
+          // Brand-specific logic: query API data differently
+          filteredData = apiData
+            .flatMap((listItem: any) => listItem.opListItems || [])
+            .filter((item: any) => {
+              const casinoName = item.brand?.name || '';
+              return casinoNames.some(name => 
+                casinoName.toLowerCase().includes(name.toLowerCase()) ||
+                name.toLowerCase().includes(casinoName.toLowerCase())
+              );
+            })
+            .slice(0, limit)
           .map((item: any) => {
             const brand = item.brand || {};
             const siteOffer = item.site_offer || {};
@@ -348,6 +400,7 @@ const affiliateApiTool = createTool({
             
             return {
               casinoName: brand.name || 'Unknown Casino',
+              imageUrl: `https://media.bonusfinder.co.uk/images/${brand.brand_name_seo_friendly}.png` || '',
               affiliateUrl: item.exit_page_link_with_current_domain || '',
               reviewUrl: brand.review_link ? `https://www.bonus.ca${brand.review_link}` : '',
               ctaText: item.cta_text || 'Play now',
@@ -363,19 +416,20 @@ const affiliateApiTool = createTool({
               oplistType: oplistType || 'standard' // Mark the oplist type used
             };
           });
+        }
       }
 
       return {
         affiliateData: filteredData,
         totalFound: filteredData.length,
-        query: casinoNames
+        query: shouldFetchTopCasinos ? ['top_casinos'] : (casinoNames || [])
       };
     } catch (error) {
       console.error('Error fetching affiliate data:', error);
       return {
         affiliateData: [],
         totalFound: 0,
-        query: context.casinoNames
+        query: context.casinoNames || []
       };
     }
   }
