@@ -35,6 +35,8 @@ class SupabaseDocumentInserter {
   private pgVector: PgVector;
   private dbClient: Pool;
   private indexName: string;
+  private maxRetries: number = 3;
+  private retryDelay: number = 1000; // Start with 1 second
 
   constructor() {
     const connectionString = process.env.SUPABASE_URL || '';
@@ -45,13 +47,57 @@ class SupabaseDocumentInserter {
     
     this.dbClient = new Pool({
       connectionString,
+      max: 5, // Maximum number of clients in the pool
+      idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+      connectionTimeoutMillis: 10000, // Return an error after 10 seconds if connection could not be established
     });
     
     this.indexName = 'mastra_vectors';
   }
 
+  private async sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private async retryOperation<T>(
+    operation: () => Promise<T>,
+    operationName: string,
+    retries: number = this.maxRetries
+  ): Promise<T> {
+    let lastError: Error;
+    
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        const errorMessage = lastError.message;
+        
+        // Check if it's a connection-related error
+        const isConnectionError = errorMessage.includes('Connection terminated') ||
+                                 errorMessage.includes('db_termination') ||
+                                 errorMessage.includes('Connection ended') ||
+                                 errorMessage.includes('ECONNRESET') ||
+                                 errorMessage.includes('ENOTFOUND') ||
+                                 errorMessage.includes('ETIMEDOUT');
+        
+        if (isConnectionError && attempt < retries) {
+          const delay = this.retryDelay * Math.pow(2, attempt - 1); // Exponential backoff
+          console.log(`⚠️  ${operationName} failed (attempt ${attempt}/${retries}): ${errorMessage}`);
+          console.log(`🔄 Retrying in ${delay}ms...`);
+          await this.sleep(delay);
+          continue;
+        }
+        
+        throw lastError;
+      }
+    }
+    
+    throw lastError!;
+  }
+
   async connect() {
-    try {
+    await this.retryOperation(async () => {
       // Create the index if it doesn't exist
       await this.pgVector.createIndex({
         indexName: this.indexName,
@@ -66,15 +112,7 @@ class SupabaseDocumentInserter {
         }
       });
       console.log('✅ Connected to Supabase and ensured index exists');
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if (errorMessage?.includes('already exists') || errorMessage?.includes('relation') || errorMessage?.includes('duplicate')) {
-        console.log('✅ Connected to Supabase (index exists)');
-      } else {
-        console.error('Error connecting to Supabase:', error);
-        throw error;
-      }
-    }
+    }, 'Database connection');
   }
 
   async disconnect() {
@@ -88,7 +126,7 @@ class SupabaseDocumentInserter {
   }
 
   private async checkExistingFile(fileHash: string): Promise<ContentFile | null> {
-    try {
+    return await this.retryOperation(async () => {
       const query = `
         SELECT * FROM content_files 
         WHERE file_hash = $1 
@@ -98,10 +136,10 @@ class SupabaseDocumentInserter {
       
       const result = await this.dbClient.query(query, [fileHash]);
       return result.rows[0] || null;
-    } catch (error) {
+    }, 'Check existing file').catch(error => {
       console.log('Could not check existing file, proceeding with insertion:', error);
       return null;
-    }
+    });
   }
 
   private async updateContentFileStatus(
@@ -109,7 +147,7 @@ class SupabaseDocumentInserter {
     status: ContentFile['status'], 
     errorMessage?: string
   ): Promise<void> {
-    try {
+    await this.retryOperation(async () => {
       const query = `
         UPDATE content_files 
         SET status = $1, 
@@ -123,16 +161,16 @@ class SupabaseDocumentInserter {
       
       await this.dbClient.query(query, [status, processedAt, errorMessage, fileHash]);
       console.log(`Updated file ${fileHash} to status: ${status}`);
-    } catch (error) {
+    }, 'Update file status').catch(error => {
       console.error('Error updating content file status:', error);
-    }
+    });
   }
 
 
   async processDocumentFromDB(contentFile: ContentFile, force: boolean = false): Promise<void> {
     const { id, filename, content, file_hash, metadata } = contentFile;
     
-    try {
+    await this.retryOperation(async () => {
       // Check if file already exists and is up to date (unless force mode)
       if (!force) {
         const existingFile = await this.checkExistingFile(file_hash);
@@ -194,7 +232,7 @@ class SupabaseDocumentInserter {
       await this.updateContentFileStatus(file_hash, 'completed');
 
       console.log(`✅ Successfully processed file: ${filename} with ${chunks.length} chunks`);
-    } catch (error) {
+    }, `Process document ${filename}`).catch(async (error) => {
       console.error(`❌ Error processing file ${filename}:`, error);
       
       // Update status to failed
@@ -205,11 +243,11 @@ class SupabaseDocumentInserter {
       );
       
       throw error;
-    }
+    });
   }
 
   async getPendingFiles(force: boolean = false): Promise<ContentFile[]> {
-    try {
+    return await this.retryOperation(async () => {
       let query: string;
       let params: any[] = [];
       
@@ -228,14 +266,14 @@ class SupabaseDocumentInserter {
       
       const result = await this.dbClient.query(query, params);
       return result.rows;
-    } catch (error) {
+    }, 'Fetch pending files').catch(error => {
       console.error('Error fetching pending files:', error);
       return [];
-    }
+    });
   }
 
   async clearIndex(): Promise<void> {
-    try {
+    await this.retryOperation(async () => {
       console.log('🗑️  Clearing vector data...');
       
       // Use TRUNCATE to efficiently clear all data from the table
@@ -245,7 +283,7 @@ class SupabaseDocumentInserter {
       console.log('✅ Vector table truncated successfully');
       
       console.log('✅ Vector data cleared successfully');
-    } catch (error) {
+    }, 'Clear vector index').catch(error => {
       const errorMessage = error instanceof Error ? error.message : String(error);
       if (errorMessage?.includes('does not exist') || errorMessage?.includes('not found')) {
         console.log('ℹ️  Vector table does not exist (already clear)');
@@ -253,7 +291,7 @@ class SupabaseDocumentInserter {
         console.error('❌ Error clearing vector data:', errorMessage);
         throw error;
       }
-    }
+    });
   }
 
 
@@ -270,20 +308,29 @@ class SupabaseDocumentInserter {
     const pendingFiles = await this.getPendingFiles(force);
     console.log(`Found ${pendingFiles.length} files to process`);
 
+    let processedCount = 0;
+    let failedCount = 0;
+
     for (const file of pendingFiles) {
       try {
+        console.log(`\n📄 Processing file ${processedCount + failedCount + 1}/${pendingFiles.length}: ${file.filename}`);
         await this.processDocumentFromDB(file, force);
+        processedCount++;
+        console.log(`✅ Progress: ${processedCount + failedCount}/${pendingFiles.length} files processed (${processedCount} successful, ${failedCount} failed)`);
       } catch (error) {
-        console.error(`Failed to process ${file.filename}:`, error);
+        failedCount++;
+        console.error(`❌ Failed to process ${file.filename}:`, error);
+        console.log(`⚠️  Progress: ${processedCount + failedCount}/${pendingFiles.length} files processed (${processedCount} successful, ${failedCount} failed)`);
         // Continue with other files
       }
     }
     
-    console.log(`✅ ${mode} processing completed`);
+    console.log(`\n🎉 ${mode} processing completed!`);
+    console.log(`📊 Final stats: ${processedCount} successful, ${failedCount} failed out of ${pendingFiles.length} total files`);
   }
 
   async queryDocuments(query: string, topK: number = 5): Promise<any[]> {
-    try {
+    return await this.retryOperation(async () => {
       // Generate embedding for the query
       const { embeddings } = await embedMany({
         model: openai.embedding('text-embedding-3-small'),
@@ -299,10 +346,7 @@ class SupabaseDocumentInserter {
       });
 
       return results;
-    } catch (error) {
-      console.error('Error querying documents:', error);
-      throw error;
-    }
+    }, 'Query documents');
   }
 }
 
