@@ -230,7 +230,7 @@ const affiliateApiTool = createTool({
       
       const apiUrl = isValidUrl 
         ? customApiUrl 
-        : 'https://bonusca.gdcgroup.io/private/country-ca/region-ab/rank-1/language-en';
+        : 'https://bonusfindercouk.gdcgroup.io/private/country-uk/rank-1';
       
       console.log(`🔗 Using API URL: ${apiUrl} ${isValidUrl ? '(from oplist_url)' : '(fallback to default)'}`);
       console.log(`📋 Oplist Type: ${oplistType || 'not specified'}`);
