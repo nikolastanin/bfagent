@@ -205,7 +205,7 @@ const affiliateApiTool = createTool({
   outputSchema: z.object({
     affiliateData: z.array(z.object({
       casinoName: z.string(),
-      imageUrl: z.string().optional(),
+      imageUrl: z.string(),
       affiliateUrl: z.string().optional(),
       reviewUrl: z.string().optional(),
       ctaText: z.string().optional(),
