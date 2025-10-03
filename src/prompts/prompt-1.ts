@@ -70,7 +70,8 @@ For AFFILIATE LINKS (preferred when available):
   "wagering": "WAGERING_REQUIREMENT_FROM_API",
   "withdrawalTime": "WITHDRAWAL_TIME_FROM_API",
   "linkType": "affiliate",
-  "source": "api"
+  "source": "api",
+  "imageUrl": "IMAGE_URL_FROM_API"
 }
 \`\`\`
 
