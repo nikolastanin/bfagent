@@ -228,9 +228,20 @@ const affiliateApiTool = createTool({
         customApiUrl.trim() !== '' && 
         (customApiUrl.startsWith('http://') || customApiUrl.startsWith('https://'));
       
-      const apiUrl = isValidUrl 
+      let apiUrl = isValidUrl 
         ? customApiUrl 
         : 'https://bonusfindercouk.gdcgroup.io/private/country-uk/rank-1';
+      
+      // Remove any embedded credentials from the URL (e.g., preview:1q2w3e4r@domain.com)
+      // We'll use Authorization header instead
+      if (apiUrl.includes('@')) {
+        const urlParts = apiUrl.split('@');
+        if (urlParts.length === 2) {
+          const protocol = urlParts[0].split('://')[0];
+          const domain = urlParts[1];
+          apiUrl = `${protocol}://${domain}`;
+        }
+      }
       
       console.log(`🔗 Using API URL: ${apiUrl} ${isValidUrl ? '(from oplist_url)' : '(fallback to default)'}`);
       console.log(`📋 Oplist Type: ${oplistType || 'not specified'}`);
