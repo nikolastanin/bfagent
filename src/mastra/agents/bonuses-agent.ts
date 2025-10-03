@@ -468,7 +468,7 @@ Interests:[]
     vector: new LibSQLVector({ connectionUrl: 'file:../../mastra.db' }),
   }),
   instructions: prompt(),
-  model: openai('gpt-4o'),
+  model: openai('gpt-4o-mini'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,
     fetch_affiliate_data: affiliateApiTool
