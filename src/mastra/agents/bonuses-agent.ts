@@ -194,7 +194,7 @@ const knowledgeBaseTool = createTool({
 // Create a tool for fetching affiliate data from bonuses.ca API
 const affiliateApiTool = createTool({
   id: 'fetch_affiliate_data',
-  description: 'Fetch affiliate links and bonus data from the bonuses.ca API for specific casinos or top casinos when no specific names provided',
+  description: 'Fetch affiliate links and bonus data from the bonuses API for specific casinos or top casinos when no specific names provided',
   inputSchema: z.object({
     casinoNames: z.array(z.string()).optional().describe('Array of casino names to fetch affiliate data for. If empty or not provided, will fetch top casinos'),
     limit: z.number().optional().default(20).describe('Maximum number of results to return'),
