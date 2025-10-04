@@ -9,6 +9,7 @@ import { LibSQLStore } from '@mastra/libsql';
 import { LibSQLVector } from '@mastra/libsql';
 import { prompt } from '../../prompts/prompt-1';
 import { promptNew } from '../../prompts/prompt-new';
+import { promptXml } from '../../prompts/prompt-1-xml';
 
 // Function to get active vector store based on environment configuration with retry logic
 async function getActiveVectorStore(): Promise<PgVector> {
@@ -297,7 +298,7 @@ const affiliateApiTool = createTool({
               .filter(amount => amount && !isNaN(Number(amount)))
               .reduce((sum, amount) => sum + Number(amount), 0);
             
-            const bonusAmount = totalBonus > 0 ? `C$${totalBonus}` : '';
+            const bonusAmount = totalBonus > 0 ? `$${totalBonus}` : '';
             
             // Extract free spins info
             const freeSpins = bonusAttrs['other_-_description_-_part_1'] || '';
@@ -352,7 +353,7 @@ const affiliateApiTool = createTool({
               .filter(amount => amount && !isNaN(Number(amount)))
               .reduce((sum, amount) => sum + Number(amount), 0);
             
-            const bonusAmount = totalBonus > 0 ? `C$${totalBonus}` : '';
+            const bonusAmount = totalBonus > 0 ? `$${totalBonus}` : '';
             
             // Brand-specific free spins extraction
             const freeSpins = bonusAttrs['other_-_description_-_part_1'] || '';
@@ -404,7 +405,7 @@ const affiliateApiTool = createTool({
               .filter(amount => amount && !isNaN(Number(amount)))
               .reduce((sum, amount) => sum + Number(amount), 0);
             
-            const bonusAmount = totalBonus > 0 ? `C$${totalBonus}` : '';
+            const bonusAmount = totalBonus > 0 ? `$${totalBonus}` : '';
             
             // Extract free spins info
             const freeSpins = bonusAttrs['other_-_description_-_part_1'] || '';
@@ -467,7 +468,7 @@ Interests:[]
     embedder: openai.embedding('text-embedding-3-small'),
     vector: new LibSQLVector({ connectionUrl: 'file:../../mastra.db' }),
   }),
-  instructions: prompt(),
+  instructions: promptXml(),
   model: openai('gpt-4o'),
   tools: {
     query_knowledge_base: knowledgeBaseTool,

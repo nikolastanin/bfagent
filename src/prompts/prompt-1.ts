@@ -119,7 +119,7 @@ EXAMPLE WITH AFFILIATE-FIRST APPROACH:
   "url": "affiliate_url_from_api",
   "title": "Jackpot City Casino",
   "ctaText": "Play now",
-  "bonusAmount": "C$1600",
+  "bonusAmount": "$1600",
   "freeSpins": "10 Free Spins Daily!",
   "wagering": "35x",
   "withdrawalTime": "48 Hours",

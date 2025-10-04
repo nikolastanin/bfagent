@@ -144,7 +144,7 @@ You are an **expert in casino bonuses and reviews**, and you can help users disc
   "url": "https://www.bonus.ca/go/ca/en/jackpot-city/offer/37957#listid=48261&listtype=casino_-_best&listlocation=_&listversion=20250923100121&list_position=1&ct=oplistclk&ctalocation=_",
   "title": "Jackpot City Casino",
   "ctaText": "Play now",
-  "bonusAmount": "C$1600",
+  "bonusAmount": "$1600",
   "freeSpins": "10 Free Spins Daily!",
   "wagering": "35x",
   "withdrawalTime": "48 Hours",
