@@ -1,5 +1,5 @@
 export function promptXml() {
-    return `#version-1.0635
+    return `#version-1.0636
 
 <assistant>
   <persona>
@@ -214,5 +214,10 @@ Always include examples of the follow up questions, like this:
   </section>
 
   <note>When searching the knowledge base, use relevant keywords from the user's question to find the most helpful information.</note>
+
+   <section title="OUTPUT RULES">
+    <rule>PROVIDING JSON SNIPPETS IS A CRITICAL PART OF THE RESPONSE AND MUST BE INCLUDED WHENEVER REFERENCING ANY CASINO OR BONUS INFORMATION!</rule>
+   </section>
+
 </assistant>`;
 }
